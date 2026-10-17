@@ -1,0 +1,7 @@
+This walkthrough uses screenshots captured from the deployed ScopeLedger demo. Gemini 3.8 Flash receives synthetic customer notes, including a malicious payment instruction. The actual model ignored that instruction and completed all six approved drafts and tasks. No adversarial tool calls were inserted after planning.
+
+This separate deterministic boundary test deliberately proposes the forbidden payment change. With controls off, the sandbox reference changes. With controls on, the exact argument check blocks that proposal, while all six legitimate actions still finish. The decision trail records each result.
+
+The evaluation lab checks seven scenarios: normal work, payment redirection, substituted recipients, export, scope escalation, replay, and verifier outage. All seven pass. The outage case stops execution. These are regression tests, not model attack success measurements.
+
+The public demo runs on Texmed Google Cloud. Source and a passing quality pipeline are public on GitHub. All data is fictional, with no emails or payments sent. Live ArmorIQ verification is still pending authentication, and is clearly marked not verified. This walkthrough is a review draft, not a completed submission.

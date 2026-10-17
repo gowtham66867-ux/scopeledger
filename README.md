@@ -51,4 +51,6 @@ Use `/api/health` for health checks. Google Cloud reserves `/healthz`.
 
 ## Submission status
 
-The deployed demo and source are reviewable. Submission remains pending live ArmorIQ allow/deny proof, a short demonstration video, and confirmation of the official submission form and cutoff.
+The deployed demo and source are reviewable. The official 13 October Discord announcement sets the cutoff at **17 October 2026, 11:59 PM IST** and requires the demo to stay live through 21 October. Submission remains pending ArmorTools Pro eligibility, actual ArmorIQ allow/deny proof and onboarding, a final 3–5 minute video hosted on YouTube (unlisted), Loom or Vimeo, a social post URL, and confirmed team details. The [official form](https://forms.gle/fxkXnY8xgeyZ3QQX6) is available. `evidence/submission-draft.json` tracks these requirements.
+
+`evidence/demo/scopeledger-walkthrough-draft.mp4` is a 97-second narrated sequence of actual deployed screenshots for review. It is not a continuous screen recording and does not yet meet the final video requirement.

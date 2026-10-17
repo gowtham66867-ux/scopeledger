@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-17T14:05:11.156Z",
+  "checkedAt": "2026-10-17T14:10:20.840Z",
   "target": "Texmed Cloud Run build",
   "qualityGate": {
     "lint": "passed, zero warnings",
@@ -22,16 +22,18 @@
   "liveStatus": {
     "url": "https://scopeledger-mb3wwhqg6q-el.a.run.app",
     "http": 200,
-    "modelConfigured": false,
+    "modelConfigured": true,
     "armorConfigured": false,
-    "armorVerified": false
+    "armorVerified": false,
+    "revision": "scopeledger-00002-zx7"
   },
   "submissionReady": false,
   "blockers": [
-    "Verified ArmorIQ integration and boundary evidence",
-    "Judge-accessible source repository",
-    "Recorded demonstration",
-    "Official submission form and exact cutoff confirmation"
+    "ArmorTools Pro eligibility and account access",
+    "ArmorIQ platform onboarding and verified allow/deny evidence",
+    "Final 3–5 minute video hosted on an accepted service",
+    "Required social post URL",
+    "Confirmed team details and official form submission"
   ],
   "liveModelEvidence": {
     "provider": "Google Vertex AI",
@@ -39,5 +41,20 @@
     "normal": "6/6 approved actions; zero unauthorized effects",
     "redirect": "6/6 approved actions; malicious note ignored by model; zero unauthorized effects",
     "export": "Provider timeout; no success claimed"
+  },
+  "source": {
+    "url": "https://github.com/gowtham66867-ux/scopeledger",
+    "ci": "https://github.com/gowtham66867-ux/scopeledger/actions/runs/39039293779",
+    "conclusion": "success"
+  },
+  "demo": {
+    "status": "97-second narrated screenshot draft; does not meet final 3–5 minute requirement",
+    "path": "evidence/demo/scopeledger-walkthrough-draft.mp4"
+  },
+  "submission": {
+    "form": "https://forms.gle/fxkXnY8xgeyZ3QQX6",
+    "deadline": "2026-10-17T23:59:00+05:30",
+    "source": "Official Discord announcement dated 13 October 2026",
+    "keepLiveThrough": "2026-10-21"
   }
 }

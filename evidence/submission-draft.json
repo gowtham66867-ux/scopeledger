@@ -1,0 +1,21 @@
+{
+  "status": "Incomplete draft; do not submit as verified",
+  "projectName": "ScopeLedger",
+  "description": "A collections operations agent that turns synthetic overdue invoice records into follow-up drafts and review tasks. Gemini on Vertex AI proposes structured tool calls. A server-side signed scope limits actions to approved tools and exact arguments, prevents replay, and records a linked decision trail.",
+  "liveDemo": "https://scopeledger-mb3wwhqg6q-el.a.run.app",
+  "repository": "https://github.com/gowtham66867-ux/scopeledger",
+  "submissionForm": "https://forms.gle/fxkXnY8xgeyZ3QQX6",
+  "officialAnnouncement": "https://discord.com/channels/1450796662334423135/1554827636646088714",
+  "problemStatement": "https://discord.com/channels/1450796662334423135/1558334610507567174",
+  "deadline": "2026-10-17T23:59:00+05:30",
+  "demoAvailabilityRequiredThrough": "2026-10-21",
+  "requiredAccounts": ["ArmorTools Pro for every member; announcement offers FLOWSTATEPRO for the first 12 months", "ArmorIQ platform: API key, agent and MCP onboarding required by problem statement"],
+  "videoRequirements": "13 October announcement requests 3–5 minutes on unlisted YouTube, Loom or Vimeo, showing problem, end-to-end product, ArmorTools console, Policy Studio rules and takeaways. This updates the older 10 October max-90-second instruction.",
+  "judging": {"demoVideo":40,"liveDemo":40,"armorToolsPro":5,"takeaways":15},
+  "armorIQUse": "SDK capturePlan, intent token and invoke integration plus an MCP endpoint are implemented. Live ArmorIQ allow/deny proof is pending authentication and registration. Do not claim this field is complete.",
+  "otherTools": ["React", "Vite", "Node.js", "Google Vertex AI Gemini 3.8 Flash", "Google Cloud Run", "private Google Cloud Storage", "GitHub Actions"],
+  "elevenLabsIntegration": "Not used",
+  "takeaways": "Useful work and safety must be measured together. The deterministic harness preserves all six approved actions while blocking forbidden effects. Real-model runs receive the malicious note directly, with no inserted attack calls after planning. A model ignoring an injection is distinct from executor enforcement. Provider outages are errors, never successful policy blocks. Next steps are authenticated tenant isolation, durable idempotency across runs, independently anchored audit hashes, and real ArmorIQ Policy Studio evaluation.",
+  "socialPostDraft": "Built ScopeLedger for #FlowStateHackathon: a synthetic collections agent with live Gemini planning, exact-scope controls, inspectable decisions and a seven-scenario regression harness. Demo: https://scopeledger-mb3wwhqg6q-el.a.run.app Source: https://github.com/gowtham66867-ux/scopeledger. ArmorIQ cloud verification is still in progress. @ArmorIQForDevs",
+  "missing": ["Confirmed team name, leader full name/email and member count", "Active ArmorTools Pro account", "ArmorIQ agent/MCP onboarding and actual allowed/blocked traces", "Final 3–5 minute hosted video", "Authorized publication of final X or LinkedIn post and its URL", "Complete and submit the official form"]
+}
