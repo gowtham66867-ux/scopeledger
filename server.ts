@@ -6,10 +6,13 @@ import {Storage} from '@google-cloud/storage';
 import {GoogleAuth} from 'google-auth-library';
 import {runScenario,evaluate,scenarios} from './lib/engine.mjs';
 import {planWithGemini} from './lib/gemini';
-import {ArmorIQClient,IntentMismatchException,PolicyBlockedException,PolicyHoldException} from '@armoriq/sdk';
+import {ArmorIQClient} from '@armoriq/sdk';
+import {verifyArmorBoundary} from './lib/armoriq';
 const port=Number(process.env.PORT||8080);const root=resolve('dist/client');
 const storage=process.env.RUNS_BUCKET?new Storage().bucket(process.env.RUNS_BUCKET):null;
 const vertexAuth=new GoogleAuth({scopes:['https://www.googleapis.com/auth/cloud-platform']});
+let latestArmorProof:any=null;
+async function armorProof(){if(storage){try{const[bytes]=await storage.file('proofs/armoriq-latest.json').download();return JSON.parse(bytes.toString());}catch(error){if((error as {code?:number}).code!==404)throw error;}}return latestArmorProof;}
 const memory=new Map<string,any[]>();const rate=new Map<string,{at:number;count:number}>();
 function json(res:ServerResponse,status:number,data:unknown){res.writeHead(status,{'content-type':'application/json','cache-control':'no-store','x-content-type-options':'nosniff'});res.end(JSON.stringify(data));}
 function session(req:IncomingMessage,res:ServerResponse){
@@ -18,7 +21,8 @@ function session(req:IncomingMessage,res:ServerResponse){
  if(id!==value)res.setHeader('Set-Cookie',`scopeledger_session=${id}; HttpOnly; SameSite=Strict; Path=/; Max-Age=604800${process.env.K_SERVICE?'; Secure':''}`);
  return createHash('sha256').update(id).digest('hex');
 }
-function admin(req:IncomingMessage){const secret=process.env.ADMIN_BEARER_TOKEN;const token=req.headers.authorization?.replace(/^Bearer /,'')||'';return !!secret&&Buffer.byteLength(token)===Buffer.byteLength(secret)&&timingSafeEqual(Buffer.from(token),Buffer.from(secret));}
+function bearer(req:IncomingMessage,secret:string|undefined){const token=req.headers.authorization?.replace(/^Bearer /,'')||'';return !!secret&&Buffer.byteLength(token)===Buffer.byteLength(secret)&&timingSafeEqual(Buffer.from(token),Buffer.from(secret));}
+function admin(req:IncomingMessage){return bearer(req,process.env.ADMIN_BEARER_TOKEN);}
 async function save(id:string,report:any){if(storage){await storage.file(`runs/${id}/${report.createdAt.replace(/:/g,'-')}-${report.id}.json`).save(JSON.stringify(report),{resumable:false,contentType:'application/json',preconditionOpts:{ifGenerationMatch:0}});}else{memory.set(id,[report,...(memory.get(id)||[])].slice(0,20));if(memory.size>1000)memory.delete(memory.keys().next().value!);}}
 async function history(id:string){if(!storage)return memory.get(id)||[];const [files]=await storage.getFiles({prefix:`runs/${id}/`,autoPaginate:true});return Promise.all(files.sort((a,b)=>b.name.localeCompare(a.name)).slice(0,20).map(async file=>{const [bytes]=await file.download();return JSON.parse(bytes.toString());}));}
 async function body(req:IncomingMessage){let raw='';for await(const chunk of req){raw+=chunk.toString();if(Buffer.byteLength(raw)>12000)throw new Error('Request too large');}return JSON.parse(raw||'{}');}
@@ -37,11 +41,8 @@ async function reserveModelRun(){
 }
 async function cloudProof(email:string){
  if(!process.env.ARMORIQ_API_KEY||!process.env.ARMORIQ_MCP_NAME)throw new Error('ArmorIQ credentials and MCP registration are not configured');
- const client=new ArmorIQClient({apiKey:process.env.ARMORIQ_API_KEY,useProduction:true});const mcp=process.env.ARMORIQ_MCP_NAME;
- const plan={goal:'Run synthetic collections',steps:[{mcp,action:'run_collections_workflow',params:{scenario:'redirect'}}]};const captured=client.capturePlan('deterministic-boundary-proof',plan.goal,plan);const token=await client.getIntentToken(captured);
- const result=await client.invoke(mcp,'run_collections_workflow',token,{scenario:'redirect'},undefined,email);if(result.status==='error'||result.verified!==true)throw new Error('Allowed call did not return verified success');
- try{await client.invoke(mcp,'change_payment_details',token,{accountId:'AC-101',bank:'ATTACKER-DEMO-999'},undefined,email);return{armorVerified:true,boundaryVerified:false,decision:'unexpectedly allowed'};}
- catch(error){if(error instanceof IntentMismatchException||error instanceof PolicyBlockedException)return{armorVerified:true,boundaryVerified:true,decision:'blocked',allowed:result.result,at:new Date().toISOString()};if(error instanceof PolicyHoldException)return{armorVerified:true,boundaryVerified:false,decision:'held'};throw error;}
+ const mcp=process.env.ARMORIQ_MCP_NAME;const client=new ArmorIQClient({apiKey:process.env.ARMORIQ_API_KEY,useProduction:true,agentId:process.env.ARMORIQ_AGENT_ID||'scopeledger',userId:process.env.ARMORIQ_USER_ID||'scopeledger-runtime',mcpCredentials:process.env.MCP_BEARER_TOKEN?{[mcp]:{authType:'bearer',token:process.env.MCP_BEARER_TOKEN}}:{}});
+ return verifyArmorBoundary(client,mcp,email);
 }
 export const server=createServer(async(req,res)=>{
  res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','same-origin');res.setHeader('X-Frame-Options','DENY');
@@ -53,7 +54,8 @@ export const server=createServer(async(req,res)=>{
    const origin=req.headers.origin;if(origin&&new URL(origin).host!==req.headers.host)return json(res,403,{error:'Origin not permitted'});
    const counter=rate.get(id);if(counter&&Date.now()-counter.at<60000){if(counter.count++>=30)return json(res,429,{error:'Please wait a minute before running more scenarios.'});}else{rate.set(id,{at:Date.now(),count:1});if(rate.size>2000)rate.delete(rate.keys().next().value!);}
   }
-  if(path==='/api/status'&&req.method==='GET')return json(res,200,{modelConfigured:!!((process.env.VERTEX_PROJECT||process.env.GEMINI_API_KEY)&&process.env.PUBLIC_MODEL_DEMO==='true'),modelProvider:'Google Gemini',modelName:process.env.GEMINI_MODEL||'gemini-3.8-flash',armorConfigured:!!process.env.ARMORIQ_API_KEY,armorVerified:false,enforcement:'Local signed-scope policy',dataset:'Synthetic business invoices',outboundEmail:false,hosting:'Texmed Google Cloud Run',history:storage?'Google Cloud Storage':'ephemeral local memory'});
+  if(path==='/api/armor-evidence'&&req.method==='GET'){const proof=await armorProof();return json(res,proof?200:404,proof||{error:'No live ArmorIQ evidence has been saved yet'});}
+  if(path==='/api/status'&&req.method==='GET'){const proof=await armorProof();return json(res,200,{modelConfigured:!!((process.env.VERTEX_PROJECT||process.env.GEMINI_API_KEY)&&process.env.PUBLIC_MODEL_DEMO==='true'),modelProvider:'Google Gemini',modelName:process.env.GEMINI_MODEL||'gemini-3.8-flash',armorConfigured:!!process.env.ARMORIQ_API_KEY,armorVerified:proof?.revision===(process.env.K_REVISION||'local')&&proof?.armorVerified===true&&proof?.boundaryVerified===true,armorProofAt:proof?.at||null,enforcement:'Local signed-scope policy',dataset:'Synthetic business invoices',outboundEmail:false,hosting:'Texmed Google Cloud Run',history:storage?'Google Cloud Storage':'ephemeral local memory'});}
   if(path==='/api/history'&&req.method==='GET')return json(res,200,await history(id));
   if(path==='/api/evaluate'&&req.method==='POST')return json(res,200,evaluate());
   if(path==='/api/run'&&req.method==='POST'){
@@ -74,16 +76,16 @@ export const server=createServer(async(req,res)=>{
    if(!process.env.ARMORIQ_API_KEY||!process.env.ARMORIQ_MCP_NAME)return json(res,409,{error:'ArmorIQ credentials and MCP registration are not configured'});
    if(!admin(req))return json(res,403,{error:'Live cloud verification requires administrator authorization'});
    if(!process.env.ARMORIQ_USER_EMAIL)return json(res,409,{error:'ArmorIQ end-user attribution is not configured'});
-   return json(res,200,await cloudProof(process.env.ARMORIQ_USER_EMAIL));
+   const proof={...await cloudProof(process.env.ARMORIQ_USER_EMAIL),revision:process.env.K_REVISION||'local'};if(proof.armorVerified&&proof.boundaryVerified){if(storage)await storage.file('proofs/armoriq-latest.json').save(JSON.stringify(proof),{resumable:false,contentType:'application/json'});latestArmorProof=proof;}return json(res,200,proof);
   }
   if(path==='/mcp'&&req.method==='POST'){
    const input=await body(req);const rpcId=input.id??null;
    const reply=(result:unknown)=>json(res,200,{jsonrpc:'2.0',id:rpcId,result});
    if(input.method==='initialize')return reply({protocolVersion:'2025-03-26',capabilities:{tools:{}},serverInfo:{name:'scopeledger-mcp',version:'0.2.0'}});
    if(input.method==='notifications/initialized'){res.writeHead(202);return res.end();}
-   if(input.method==='tools/list')return reply({tools:[{name:'run_collections_workflow',description:'Run a synthetic collections workflow under local signed-scope controls',inputSchema:{type:'object',properties:{scenario:{type:'string',enum:scenarios.map(s=>s.id)}},required:['scenario'],additionalProperties:false}}]});
+   if(input.method==='tools/list')return reply({tools:[{name:'run_collections_workflow',description:'Run a synthetic collections workflow under local signed-scope controls',inputSchema:{type:'object',properties:{scenario:{type:'string',enum:scenarios.map(s=>s.id)}},required:['scenario'],additionalProperties:false}},{name:'change_payment_details',description:'Forbidden boundary-test proposal. Local execution always rejects this tool.',inputSchema:{type:'object',properties:{accountId:{type:'string'},bank:{type:'string'}},required:['accountId','bank'],additionalProperties:false}}]});
    if(input.method!=='tools/call')return json(res,400,{error:'Unsupported MCP method'});
-   if(!admin(req))return json(res,401,{error:'Service authorization required'});
+   if(!bearer(req,process.env.MCP_BEARER_TOKEN))return json(res,401,{error:'Service authorization required'});
    const args=input.params?.arguments;if(input.params?.name!=='run_collections_workflow'||!args||Object.keys(args).some(k=>k!=='scenario')||!scenarios.some(s=>s.id===args.scenario))return reply({isError:true,content:[{type:'text',text:'Tool or arguments unavailable'}]});
    return reply({content:[{type:'text',text:JSON.stringify(runScenario(args.scenario))}]});
   }

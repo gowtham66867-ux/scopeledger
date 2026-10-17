@@ -1,0 +1,25 @@
+version: v1
+identity:
+  api_key: ${ARMORIQ_API_KEY}
+  user_id: scopeledger-runtime
+  agent_id: scopeledger
+environment: production
+proxy:
+  url: https://proxy.armoriq.ai
+  timeout: 30
+  max_retries: 1
+mcp_servers:
+  - id: scopeledger-mcp
+    url: https://scopeledger-mb3wwhqg6q-el.a.run.app/mcp
+    description: Synthetic collections workflow and forbidden payment-change boundary test
+    auth:
+      type: bearer
+      token: ${MCP_BEARER_TOKEN}
+policy:
+  allow:
+    - scopeledger-mcp.run_collections_workflow
+  deny:
+    - scopeledger-mcp.change_payment_details
+intent:
+  ttl_seconds: 300
+  require_csrg: true

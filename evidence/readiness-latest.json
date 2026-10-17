@@ -1,13 +1,13 @@
 {
-  "checkedAt": "2026-10-17T14:10:20.840Z",
+  "checkedAt": "2026-10-17T14:40:53.024Z",
   "target": "Texmed Cloud Run build",
   "qualityGate": {
     "lint": "passed, zero warnings",
     "typecheck": "passed",
     "build": "passed",
     "texmedTests": {
-      "passed": 15,
-      "total": 15
+      "passed": 19,
+      "total": 19
     },
     "cliInterfaceTests": {
       "passed": 5,
@@ -23,17 +23,14 @@
     "url": "https://scopeledger-mb3wwhqg6q-el.a.run.app",
     "http": 200,
     "modelConfigured": true,
-    "armorConfigured": false,
-    "armorVerified": false,
-    "revision": "scopeledger-00002-zx7"
+    "armorConfigured": true,
+    "armorVerified": true,
+    "revision": "scopeledger-00005-dpv"
   },
   "submissionReady": false,
   "blockers": [
-    "ArmorTools Pro eligibility and account access",
-    "ArmorIQ platform onboarding and verified allow/deny evidence",
-    "Final 3–5 minute video hosted on an accepted service",
-    "Required social post URL",
-    "Confirmed team details and official form submission"
+    "Final 3–5 minute video upload to accepted hosting",
+    "Official form submission"
   ],
   "liveModelEvidence": {
     "provider": "Google Vertex AI",
@@ -48,13 +45,26 @@
     "conclusion": "success"
   },
   "demo": {
-    "status": "97-second narrated screenshot draft; does not meet final 3–5 minute requirement",
-    "path": "evidence/demo/scopeledger-walkthrough-draft.mp4"
+    "status": "4:45 narrated walkthrough of actual captured application and platform screens; waiting for YouTube upload Terms confirmation",
+    "durationSeconds": 285.083333,
+    "path": "evidence/demo/scopeledger-demo.mp4"
   },
   "submission": {
     "form": "https://forms.gle/fxkXnY8xgeyZ3QQX6",
     "deadline": "2026-10-17T23:59:00+05:30",
     "source": "Official Discord announcement dated 13 October 2026",
     "keepLiveThrough": "2026-10-21"
-  }
+  },
+  "armorEvidence": {
+    "file": "evidence/armoriq-live.json",
+    "publicEndpoint": "https://scopeledger-mb3wwhqg6q-el.a.run.app/api/armor-evidence",
+    "boundaryLayer": "ArmorIQ proxy policy",
+    "allowed": "verified success",
+    "forbidden": "change_payment_details blocked by policy"
+  },
+  "eligibility": {
+    "armorToolsPro": "active, verified in console",
+    "teamSize": 1
+  },
+  "socialPost": "https://x.com/gr_gowtham/status/2111464435244269650"
 }

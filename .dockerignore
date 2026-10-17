@@ -3,3 +3,8 @@ node_modules
 dist
 .env*
 *.log
+
+.armoriq/
+armoriq.local.yaml
+*.key
+*.pem

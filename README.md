@@ -18,7 +18,7 @@ React/Vite frontend → Node HTTP service → Gemini on Vertex AI → signed-sco
 
 The server signs an exact tool-and-argument scope, checks expiry and replay, and renders drafts from trusted records. Each browser receives a random HttpOnly/SameSite session cookie; history is stored under its SHA-256 namespace. The audit event hash chain detects edits only if its final hash is independently trusted. This prototype does not provide company SSO or protection for real customer workloads.
 
-ArmorIQ SDK integration and an MCP endpoint are implemented. **Live ArmorIQ verification is still pending**; local policy results must not be presented as ArmorIQ cloud evidence. MCP discovery is public; execution requires a server-side bearer token.
+ArmorIQ SDK integration and an MCP endpoint are implemented. **Live ArmorIQ verification passed**: its proxy verified `run_collections_workflow` and blocked `change_payment_details` by policy. `/api/armor-evidence` exposes the dated report and plan identifiers; `/api/status` marks it verified only for the deployment revision that produced it. Local per-action policy results remain separate from this cloud proof. MCP discovery is public; execution requires its own service bearer token. The admin token cannot execute MCP tools.
 
 ## Evidence
 
@@ -37,11 +37,11 @@ npm run test:coverage
 npm start
 ```
 
-`check` runs ESLint (zero warnings), strict TypeScript, a production build, 15 tests, deterministic evaluation and the production dependency audit. Coverage measures the JavaScript engine and fixture modules, not browser or external-service coverage.
+`check` runs ESLint (zero warnings), strict TypeScript, a production build, 19 tests, deterministic evaluation and the production dependency audit. Coverage measures the JavaScript engine and fixture modules, not browser or external-service coverage.
 
 Local history uses bounded memory unless `RUNS_BUCKET` is configured. Configure `VERTEX_PROJECT` for workload-identity Vertex authentication and `GEMINI_MODEL=gemini-3.8-flash`. Alternatively, set a server-only `GEMINI_API_KEY`. `PUBLIC_MODEL_DEMO=true` enables public model execution only with a private `RUNS_BUCKET` for the shared allowance. Without this flag, model runs require `ADMIN_BEARER_TOKEN`.
 
-Optional ArmorIQ configuration: `ARMORIQ_API_KEY`, `ARMORIQ_MCP_NAME`, `ARMORIQ_USER_EMAIL`. Keep all credentials in your secret manager; never include them in the client or repository.
+ArmorIQ configuration: `ARMORIQ_API_KEY`, `ARMORIQ_MCP_NAME`, `ARMORIQ_USER_EMAIL`, `ARMORIQ_AGENT_ID`, `ARMORIQ_USER_ID`, and the separate `MCP_BEARER_TOKEN`. See `armoriq.example.yaml` for the allow/deny registration. The administrator-only `POST /api/cloud` performs and saves the live test; judges can read its proof without credentials. Keep all credentials in your secret manager; never include them in the client or repository.
 
 ## Deployment
 
@@ -51,6 +51,8 @@ Use `/api/health` for health checks. Google Cloud reserves `/healthz`.
 
 ## Submission status
 
-The deployed demo and source are reviewable. The official 13 October Discord announcement sets the cutoff at **17 October 2026, 11:59 PM IST** and requires the demo to stay live through 21 October. Submission remains pending ArmorTools Pro eligibility, actual ArmorIQ allow/deny proof and onboarding, a final 3–5 minute video hosted on YouTube (unlisted), Loom or Vimeo, a social post URL, and confirmed team details. The [official form](https://forms.gle/fxkXnY8xgeyZ3QQX6) is available. `evidence/submission-draft.json` tracks these requirements.
+The deployed demo and source are reviewable. The official 13 October Discord announcement sets the cutoff at **17 October 2026, 11:59 PM IST** and requires the demo to stay live through 21 October. ArmorTools Pro is active and platform onboarding and actual allow/block proof are complete. Submission remains pending a final 3–5 minute video hosted on YouTube (unlisted), Loom or Vimeo, a social post URL, and confirmed team details. The [official form](https://forms.gle/fxkXnY8xgeyZ3QQX6) is available. `evidence/submission-draft.json` tracks these requirements.
 
-`evidence/demo/scopeledger-walkthrough-draft.mp4` is a 97-second narrated sequence of actual deployed screenshots for review. It is not a continuous screen recording and does not yet meet the final video requirement.
+`evidence/demo/scopeledger-demo.mp4` is the final 4:45 narrated walkthrough of actual deployed screenshots and the ArmorIQ platform policy. It is a sequence of captured screens, not a continuous recording. The earlier 97-second draft is retained separately for development history. Hosted video publication and the final form are in progress.
+
+The required [X post](https://x.com/gr_gowtham/status/2111464435244269650) is published.

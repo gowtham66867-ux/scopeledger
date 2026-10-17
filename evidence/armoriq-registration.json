@@ -1,0 +1,18 @@
+{
+  "registeredAt": "2026-10-17T14:21:35.914865+00:00",
+  "agent": "scopeledger",
+  "mcp": "scopeledger-mcp",
+  "allow": [
+    "scopeledger-mcp.run_collections_workflow"
+  ],
+  "deny": [
+    "scopeledger-mcp.change_payment_details"
+  ],
+  "responseFields": [
+    "success",
+    "agent",
+    "registered_mcps",
+    "policies",
+    "proxy_endpoint"
+  ]
+}

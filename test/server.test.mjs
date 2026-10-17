@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {spawn}from'node:child_process';
 test('Texmed HTTP build isolates histories, blocks cross-origin and protects live services',async()=>{
- const child=spawn(process.execPath,['dist/server.mjs'],{env:{...process.env,PORT:'0',RUNS_BUCKET:''},stdio:['ignore','pipe','pipe']});
+ const child=spawn(process.execPath,['dist/server.mjs'],{env:{...process.env,PORT:'0',RUNS_BUCKET:'',MCP_BEARER_TOKEN:'test-mcp-only',ADMIN_BEARER_TOKEN:'test-admin-only'},stdio:['ignore','pipe','pipe']});
  try{
   const port=await new Promise((resolve,reject)=>{child.stdout.on('data',b=>{const m=b.toString().match(/listening on (\d+)/);if(m)resolve(m[1]);});child.once('error',reject);child.once('exit',c=>reject(new Error('Server exited '+c)));});const base='http://127.0.0.1:'+port;
   const start=await fetch(base+'/');assert.equal(start.status,200);const cookie=start.headers.getSetCookie()[0].split(';')[0];assert.match(cookie,/scopeledger_session=[a-f0-9]{64}/);
@@ -10,6 +10,10 @@ test('Texmed HTTP build isolates histories, blocks cross-origin and protects liv
   const cross=await fetch(base+'/api/run',{method:'POST',headers:{cookie,origin:'https://attacker.invalid'},body:'{}'});assert.equal(cross.status,403);
   const model=await fetch(base+'/api/run',{method:'POST',headers:{cookie},body:JSON.stringify({scenario:'normal',planner:'model'})});assert.equal(model.status,403);
   const mcp=await fetch(base+'/mcp',{method:'POST',headers:{cookie},body:JSON.stringify({id:1,method:'tools/call',params:{name:'run_collections_workflow',arguments:{scenario:'normal'}}})});assert.equal(mcp.status,401);
+  const call=(token,name,args)=>fetch(base+'/mcp',{method:'POST',headers:{authorization:'Bearer '+token},body:JSON.stringify({id:2,method:'tools/call',params:{name,arguments:args}})});
+  assert.equal((await call('test-admin-only','run_collections_workflow',{scenario:'normal'})).status,401);
+  const allowed=await(await call('test-mcp-only','run_collections_workflow',{scenario:'normal'})).json();assert.equal(JSON.parse(allowed.result.content[0].text).metrics.legitimateCompleted,6);
+  const forbidden=await(await call('test-mcp-only','change_payment_details',{accountId:'AC-101',bank:'ATTACKER-DEMO-999'})).json();assert.equal(forbidden.result.isError,true);
   const suite=await(await fetch(base+'/api/evaluate',{method:'POST',headers:{cookie},body:'{}'})).json();assert.equal(suite.passed,7);
   const status=await(await fetch(base+'/api/status')).json();assert.equal(status.armorVerified,false);
  }finally{child.kill('SIGTERM');}
