@@ -51,8 +51,12 @@ Use `/api/health` for health checks. Google Cloud reserves `/healthz`.
 
 ## Submission status
 
-The deployed demo and source are reviewable. The official 13 October Discord announcement sets the cutoff at **17 October 2026, 11:59 PM IST** and requires the demo to stay live through 21 October. ArmorTools Pro is active and platform onboarding and actual allow/block proof are complete. Submission remains pending a final 3–5 minute video hosted on YouTube (unlisted), Loom or Vimeo, a social post URL, and confirmed team details. The [official form](https://forms.gle/fxkXnY8xgeyZ3QQX6) is available. `evidence/submission-draft.json` tracks these requirements.
+**Submitted on 17 October 2026.** The official form confirmed: “Thanks for submitting. You'll hear from us after judging closes.” The receipt is saved in `evidence/submission-receipt.json` and `evidence/submission-confirmation.png`.
 
-`evidence/demo/scopeledger-demo.mp4` is the final 4:45 narrated walkthrough of actual deployed screenshots and the ArmorIQ platform policy. It is a sequence of captured screens, not a continuous recording. The earlier 97-second draft is retained separately for development history. Hosted video publication and the final form are in progress.
+- [Unlisted 4:45 demo video](https://youtu.be/xnx8Zkfc8oE)
+- [Published X post](https://x.com/gr_gowtham/status/2111464435244269650)
+- [Dated live ArmorIQ evidence](https://scopeledger-mb3wwhqg6q-el.a.run.app/api/armor-evidence)
 
-The required [X post](https://x.com/gr_gowtham/status/2111464435244269650) is published.
+ArmorTools Pro is active. The registered agent/MCP and real proxy allow/block proof are verified. The live demo must remain available through 21 October for judging.
+
+`evidence/demo/scopeledger-demo.mp4` is a narrated sequence of actual application and ArmorIQ platform captures, not a continuous screen recording. The earlier draft is retained separately for development history.

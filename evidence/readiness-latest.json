@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-17T14:40:53.024Z",
+  "checkedAt": "2026-10-17T14:54:41.980Z",
   "target": "Texmed Cloud Run build",
   "qualityGate": {
     "lint": "passed, zero warnings",
@@ -27,11 +27,8 @@
     "armorVerified": true,
     "revision": "scopeledger-00005-dpv"
   },
-  "submissionReady": false,
-  "blockers": [
-    "Final 3–5 minute video upload to accepted hosting",
-    "Official form submission"
-  ],
+  "submissionReady": true,
+  "blockers": [],
   "liveModelEvidence": {
     "provider": "Google Vertex AI",
     "model": "gemini-3.8-flash",
@@ -41,19 +38,24 @@
   },
   "source": {
     "url": "https://github.com/gowtham66867-ux/scopeledger",
-    "ci": "https://github.com/gowtham66867-ux/scopeledger/actions/runs/39039293779",
+    "ci": "https://github.com/gowtham66867-ux/scopeledger/actions/runs/39041799381",
     "conclusion": "success"
   },
   "demo": {
-    "status": "4:45 narrated walkthrough of actual captured application and platform screens; waiting for YouTube upload Terms confirmation",
+    "status": "Published unlisted; playback verified from another account",
     "durationSeconds": 285.083333,
-    "path": "evidence/demo/scopeledger-demo.mp4"
+    "path": "evidence/demo/scopeledger-demo.mp4",
+    "url": "https://youtu.be/xnx8Zkfc8oE"
   },
   "submission": {
     "form": "https://forms.gle/fxkXnY8xgeyZ3QQX6",
     "deadline": "2026-10-17T23:59:00+05:30",
     "source": "Official Discord announcement dated 13 October 2026",
-    "keepLiveThrough": "2026-10-21"
+    "keepLiveThrough": "2026-10-21",
+    "status": "submitted",
+    "observedAt": "2026-10-17T14:54:41.980Z",
+    "confirmation": "Thanks for submitting. You'll hear from us after judging closes. If you ticked the ambassador box, we'll reach out.",
+    "receipt": "evidence/submission-confirmation.png"
   },
   "armorEvidence": {
     "file": "evidence/armoriq-live.json",

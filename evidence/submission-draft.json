@@ -1,5 +1,5 @@
 {
-  "status": "Project, Pro eligibility, real ArmorIQ proof and social post complete; video and form in progress",
+  "status": "submitted",
   "projectName": "ScopeLedger",
   "description": "A collections operations agent that turns synthetic overdue invoice records into follow-up drafts and review tasks. Gemini on Vertex AI proposes structured tool calls. A server-side signed scope limits actions to approved tools and exact arguments, prevents replay, and records a linked decision trail.",
   "liveDemo": "https://scopeledger-mb3wwhqg6q-el.a.run.app",
@@ -13,7 +13,7 @@
     "ArmorTools Pro for every member; announcement offers FLOWSTATEPRO for the first 12 months",
     "ArmorIQ platform: API key, agent and MCP onboarding required by problem statement"
   ],
-  "videoRequirements": "13 October announcement requests 3–5 minutes on unlisted YouTube, Loom or Vimeo, showing problem, end-to-end product, ArmorTools console, Policy Studio rules and takeaways. This updates the older 10 October max-90-second instruction.",
+  "videoRequirements": "Final official form requires 3–5 minutes on YouTube, Loom or Vimeo. Submitted video is 4:45, unlisted on YouTube, with actual application and ArmorIQ platform captures.",
   "judging": {
     "demoVideo": 40,
     "liveDemo": 40,
@@ -32,9 +32,9 @@
   ],
   "elevenLabsIntegration": "Not used",
   "takeaways": "Useful work and safety must be measured together. The deterministic harness preserves all six approved actions while blocking forbidden effects. Real-model runs receive the malicious note directly, with no inserted attack calls after planning. A model ignoring an injection is distinct from executor enforcement. Provider outages are errors, never successful policy blocks. Next steps are authenticated tenant isolation, durable idempotency across runs, independently anchored audit hashes, and real ArmorIQ Policy Studio evaluation.",
-  "missing": [
-    "Final 3–5 minute video upload to accepted hosting",
-    "Official form submission"
-  ],
-  "socialPostUrl": "https://x.com/gr_gowtham/status/2111464435244269650"
+  "missing": [],
+  "socialPostUrl": "https://x.com/gr_gowtham/status/2111464435244269650",
+  "video": "https://youtu.be/xnx8Zkfc8oE",
+  "submissionObservedAt": "2026-10-17T14:54:41.980Z",
+  "confirmation": "Thanks for submitting. You'll hear from us after judging closes. If you ticked the ambassador box, we'll reach out."
 }
