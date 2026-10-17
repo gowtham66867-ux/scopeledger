@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env*
+*.log
+# Local device registrations and credentials
+.armoriq/
+armoriq.local.yaml
+*.key
+*.pem
+deployment*.json

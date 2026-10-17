@@ -1,0 +1,40 @@
+{
+  "name": "scopeledger-texmed",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server.mjs",
+    "start": "node dist/server.mjs",
+    "test": "node --test test/*.test.mjs",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "evaluate": "node scripts/evaluate.mjs",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=lib/*.mjs test/*.test.mjs",
+    "check": "npm run lint && npm run typecheck && npm run build && npm test && npm run evaluate && npm audit --omit=dev"
+  },
+  "dependencies": {
+    "@armoriq/sdk": "0.6.10",
+    "@google-cloud/storage": "8.4.0",
+    "google-auth-library": "11.3.1",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "esbuild": "0.28.2",
+    "eslint": "^10.13.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.13.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.71.2",
+    "vite": "8.3.4"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

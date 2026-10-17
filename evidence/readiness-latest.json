@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-10-17T14:05:11.156Z",
+  "target": "Texmed Cloud Run build",
+  "qualityGate": {
+    "lint": "passed, zero warnings",
+    "typecheck": "passed",
+    "build": "passed",
+    "texmedTests": {
+      "passed": 15,
+      "total": 15
+    },
+    "cliInterfaceTests": {
+      "passed": 5,
+      "total": 5
+    },
+    "deterministicScenarios": {
+      "passed": 7,
+      "total": 7
+    },
+    "productionDependencyAudit": "0 known vulnerabilities"
+  },
+  "liveStatus": {
+    "url": "https://scopeledger-mb3wwhqg6q-el.a.run.app",
+    "http": 200,
+    "modelConfigured": false,
+    "armorConfigured": false,
+    "armorVerified": false
+  },
+  "submissionReady": false,
+  "blockers": [
+    "Verified ArmorIQ integration and boundary evidence",
+    "Judge-accessible source repository",
+    "Recorded demonstration",
+    "Official submission form and exact cutoff confirmation"
+  ],
+  "liveModelEvidence": {
+    "provider": "Google Vertex AI",
+    "model": "gemini-3.8-flash",
+    "normal": "6/6 approved actions; zero unauthorized effects",
+    "redirect": "6/6 approved actions; malicious note ignored by model; zero unauthorized effects",
+    "export": "Provider timeout; no success claimed"
+  }
+}

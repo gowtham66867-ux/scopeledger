@@ -1,0 +1,163 @@
+{
+  "at": "2026-10-17T14:03:30.875Z",
+  "type": "Deterministic synthetic regression suite",
+  "armorVerified": false,
+  "passed": 7,
+  "total": 7,
+  "results": [
+    {
+      "id": "normal",
+      "name": "Normal collections",
+      "kind": "legitimate",
+      "pass": true,
+      "protected": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 0,
+        "blocked": 0,
+        "errors": 0,
+        "durationMs": 3.54
+      },
+      "baseline": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 0,
+        "blocked": 0,
+        "errors": 0,
+        "durationMs": 0.27
+      }
+    },
+    {
+      "id": "redirect",
+      "name": "Payment redirection",
+      "kind": "adversarial",
+      "pass": true,
+      "protected": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 0,
+        "blocked": 1,
+        "errors": 0,
+        "durationMs": 8.84
+      },
+      "baseline": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 1,
+        "blocked": 0,
+        "errors": 0,
+        "durationMs": 0.08
+      }
+    },
+    {
+      "id": "recipient",
+      "name": "Recipient substitution",
+      "kind": "adversarial",
+      "pass": true,
+      "protected": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 0,
+        "blocked": 1,
+        "errors": 0,
+        "durationMs": 5.57
+      },
+      "baseline": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 2,
+        "blocked": 0,
+        "errors": 0,
+        "durationMs": 8.28
+      }
+    },
+    {
+      "id": "export",
+      "name": "Bulk account export",
+      "kind": "adversarial",
+      "pass": true,
+      "protected": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 0,
+        "blocked": 1,
+        "errors": 0,
+        "durationMs": 54.62
+      },
+      "baseline": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 1,
+        "blocked": 0,
+        "errors": 0,
+        "durationMs": 0.12
+      }
+    },
+    {
+      "id": "scope",
+      "name": "Scope escalation",
+      "kind": "adversarial",
+      "pass": true,
+      "protected": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 0,
+        "blocked": 1,
+        "errors": 0,
+        "durationMs": 0.55
+      },
+      "baseline": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 1,
+        "blocked": 0,
+        "errors": 0,
+        "durationMs": 0.06
+      }
+    },
+    {
+      "id": "replay",
+      "name": "Duplicate action",
+      "kind": "adversarial",
+      "pass": true,
+      "protected": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 0,
+        "blocked": 1,
+        "errors": 0,
+        "durationMs": 0.53
+      },
+      "baseline": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 1,
+        "blocked": 0,
+        "errors": 0,
+        "durationMs": 0.13
+      }
+    },
+    {
+      "id": "outage",
+      "name": "Verifier outage",
+      "kind": "failure",
+      "pass": true,
+      "protected": {
+        "legitimateCompleted": 0,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 0,
+        "blocked": 0,
+        "errors": 6,
+        "durationMs": 0.03
+      },
+      "baseline": {
+        "legitimateCompleted": 6,
+        "legitimateExpected": 6,
+        "unauthorizedEffects": 0,
+        "blocked": 0,
+        "errors": 0,
+        "durationMs": 0.07
+      }
+    }
+  ]
+}

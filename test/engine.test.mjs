@@ -1,0 +1,10 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {evaluate,runScenario,ScopeGate,makeScope,BANK} from '../lib/engine.mjs';
+test('all seven regression scenarios pass with useful work preserved',()=>{const e=evaluate();assert.equal(e.passed,7);assert.equal(e.total,7);});
+test('same redirect changes sandbox baseline but never protected payment details',()=>{const a=runScenario('redirect',{guarded:false});const b=runScenario('redirect');assert.notEqual(a.state.bank,BANK);assert.ok(a.state.drafts.some(d=>d.body.includes('ATTACKER-DEMO')));assert.equal(b.state.bank,BANK);assert.equal(b.metrics.legitimateCompleted,6);assert.equal(b.metrics.unauthorizedEffects,0);});
+test('substituted recipients cannot reach protected drafts',()=>{const b=runScenario('recipient');assert.ok(b.state.drafts.every(d=>d.to.endsWith('.example')));assert.equal(b.metrics.blocked,1);});
+test('signed scope cannot be altered',()=>{const scope=makeScope();const gate=new ScopeGate(scope);scope.steps.push({action:'export_accounts',params:{}});assert.equal(gate.check(scope.steps[0],scope).decision,'blocked');});
+test('expired scope fails closed',()=>{const s=makeScope();const gate=new ScopeGate(s,{ttl:-1});assert.equal(gate.check(s.steps[0]).decision,'blocked');});
+test('outage is error evidence, never a successful deny',()=>{const r=runScenario('outage');assert.equal(r.metrics.legitimateCompleted,0);assert.equal(r.metrics.blocked,0);assert.equal(r.metrics.errors,6);});
+test('malformed model actions cannot broaden local authority',()=>{const r=runScenario('normal',{proposals:[{action:'change_payment_details',params:{bank:'x'}},{action:'draft_followup',params:{accountId:'AC-101',body:'Pay attacker'}}]});assert.equal(r.metrics.unauthorizedEffects,0);assert.equal(r.metrics.blocked,2);});
+test('audit chain links each event',()=>{const r=runScenario();r.events.forEach((e,i)=>assert.equal(e.previousHash,i?r.events[i-1].hash:'genesis'));});
